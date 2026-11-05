@@ -1,0 +1,112 @@
+HTML
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leo Rewards</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #101827;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 { color: #38e6a0; }
+    .card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 18px;
+      margin: 15px 0;
+    }
+    button {
+      background: #16c784;
+      color: #071b15;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      margin: 8px;
+      width: 90%;
+    }
+    .points {
+      font-size: 35px;
+      color: #facc15;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 LEO REWARDS</h1>
+  <p>Play games. Collect points. Have fun!</p>
+
+  <div class="card">
+    <h2>Your Points</h2>
+    <div class="points" id="points">0</div>
+    <p>Demo points</p>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Tap Game</h2>
+    <p>Tap the button to collect points!</p>
+    <button onclick="playGame()">PLAY +10 POINTS</button>
+  </div>
+
+  <div class="card">
+    <h2>🎁 Daily Bonus</h2>
+    <p>Collect your daily bonus!</p>
+    <button onclick="dailyBonus()">CLAIM BONUS</button>
+    <p id="message"></p>
+  </div>
+
+  <div class="card">
+    <h2>🏆 Leaderboard</h2>
+    <p>Coming soon!</p>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    let points = Number(localStorage.getItem("leoPoints")) || 0;
+
+    function updatePoints() {
+      document.getElementById("points").innerText = points;
+      localStorage.setItem("leoPoints", points);
+    }
+
+    function playGame() {
+      points += 10;
+      updatePoints();
+    }
+
+    function dailyBonus() {
+      const today = new Date().toDateString();
+      const last = localStorage.getItem("leoBonus");
+
+      if (last === today) {
+        document.getElementById("message").innerText =
+          "You already collected today's bonus!";
+        return;
+      }
+
+      points += 50;
+      localStorage.setItem("leoBonus", today);
+      updatePoints();
+
+      document.getElementById("message").innerText =
+        "Congratulations! You received 50 points!";
+    }
+
+    updatePoints();
+  </script>
+
+</body>
+</html>
